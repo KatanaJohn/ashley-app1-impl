@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar prefHeight="25.0" prefWidth="671.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="New List" />
+                  <MenuItem mnemonicParsing="false" text="Open List" />
+                  <MenuItem mnemonicParsing="false" text="Save List" />
+                  <MenuItem mnemonicParsing="false" text="Close List" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Delete" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                  <CheckMenuItem mnemonicParsing="false" text="Completed Items" />
+                  <CheckMenuItem mnemonicParsing="false" text="Incomplete Items" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <Separator opacity="0.0" prefHeight="17.0" prefWidth="600.0" />
+      <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="600.0" spacing="10.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <TextField alignment="CENTER" prefHeight="25.0" prefWidth="362.0" promptText="Title" />
+            <Button mnemonicParsing="false" text="Confirm" />
+         </children>
+      </HBox>
+      <Separator opacity="0.0" prefHeight="21.0" prefWidth="600.0" />
+      <ScrollPane prefHeight="297.0" prefWidth="600.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="298.0" prefWidth="576.0">
+               <children>
+                  <Button layoutX="47.0" layoutY="14.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="491.0" text="Add Item" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</VBox>

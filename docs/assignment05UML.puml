@@ -1,0 +1,56 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+class Application
+{
+    +main(String[])
+    +start(Stage stage)
+    -String getListTitleInput()
+    +ToDoList createList(String title)
+    +File saveList(ToDoList list)
+    +ToDoList loadList(String name)
+}
+
+
+class ToDoList
+{
+    String: title;
+    -int capacity
+    List<Item>: items
+    +int getCapacity()
+    +String getTitle()
+    +ToDoList()
+    +ToDoList addItemToList(ToDoList listOne, Item item)
+    +Item searchForItem(ToDoList list, String name)
+    +ToDoList removeItemFromList(ToDoList list, Item item)
+}
+
+class Item
+{
+    String: description
+    String: dueDate
+    boolean: completion
+    +Item(String description, String dueDate)
+    +String getDescription()
+    +String getDueDate()
+    +Item editItemDescription(Item item)
+    +Item editDueDate(Item item)
+    -Item markItemComplete(Item item)
+}
+
+
+class Display
+{
+    -displayList(ToDoList list)
+    -displayIncompleteItems(ToDoList list)
+    -displayCompleteItems(ToDoList list)
+}
+
+
+
+Application --o ToDoList
+Application --o Item
+Application --o Display
+
+
+@enduml
