@@ -8,22 +8,53 @@ public class Item {
 
 
     //sets new item
-    public Item(String description, String dueDate) {
+    public Item() {
 
         //use this. statements to set them
+        this.description = "";
+        this.dueDate = "";
+        this.completion = false;
 
         //will set item completion to false from the start.
     }
 
-    //gets description
+    public Item(String description, String dueDate, boolean complete) {
+
+        //use this. statements to set them
+        this.description = description;
+        this.dueDate = dueDate;
+        this.completion = complete;
+
+        //will set item completion to false from the start.
+    }
+
+
     public String getDescription() {
         return description;
+    }
+
+    //gets description
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 
     //gets due date
     public String getDueDate() {
         return dueDate;
+    }
+
+    public void setDueDate(String DueDate)
+    {
+        this.dueDate = DueDate;
+    }
+
+    public boolean getCompletionStatus() {
+        return completion;
+    }
+
+    public void setCompleteStatus(boolean completionStatus) {
+        this.completion = completionStatus;
     }
 
     public Item editItemDescription(Item item, String description)
