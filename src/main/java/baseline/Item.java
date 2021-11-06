@@ -1,10 +1,20 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 1 Solution
+ *  Copyright 2021 John Ashley
+ */
+
+
 package baseline;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Item {
     //items within a to do list should include a description and due date
     String description;
     String dueDate;
     boolean completion;
+    public static final List<Item> toDoList = new ArrayList<>();
 
 
     //sets new item
@@ -18,12 +28,13 @@ public class Item {
         //will set item completion to false from the start.
     }
 
-    public Item(String description, String dueDate, boolean complete) {
+
+    public Item(String description, String dueDate, boolean completion) {
 
         //use this. statements to set them
         this.description = description;
         this.dueDate = dueDate;
-        this.completion = complete;
+        this.completion = completion;
 
         //will set item completion to false from the start.
     }
@@ -53,37 +64,21 @@ public class Item {
         return completion;
     }
 
-    public void setCompleteStatus(boolean completionStatus) {
+    public void setCompletionStatus(boolean completionStatus) {
         this.completion = completionStatus;
     }
 
-    public Item editItemDescription(Item item, String description)
+    public static List<Item> getToDoList()
     {
-        //takes the item that a person wants to edit the description of
-
-        //goes into the item and changes that description
-
-        //returns it
-        return item;
+        return toDoList;
     }
 
-    public Item editDueDate(Item item, String date)
-    {
-        //takes the item that a person wants to edit the description of
-
-        //goes into the item and changes that dueDate
-
-        //returns it
-        return item;
+    public static void removeItem(Item item){
+        //remove the passed item from the toDoList
+        toDoList.remove(item);
     }
 
-    private Item markItemComplete(Item item)
-    {
-        //changes boolean of item from false to true. Or true to false. Basically a switch.
 
-        //return it
-        return item;
-    }
 
 
 }

@@ -2,7 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -22,15 +22,16 @@
          <menus>
             <Menu fx:id="Menu" mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem fx:id="OpenList" mnemonicParsing="false" text="Open List" />
-                  <MenuItem fx:id="SaveList" mnemonicParsing="false" text="Save List" />
+                  <MenuItem fx:id="OpenList" mnemonicParsing="false" onAction="#loadFile" text="Open List" />
+                  <MenuItem fx:id="SaveList" mnemonicParsing="false" onAction="#saveList" text="Save List" />
                   <MenuItem fx:id="CloseList" mnemonicParsing="false" text="Close List" />
                </items>
             </Menu>
             <Menu fx:id="ViewList" mnemonicParsing="false" text="View">
                <items>
-                  <CheckMenuItem fx:id="ViewCompleted" mnemonicParsing="false" text="Completed Items" />
-                  <CheckMenuItem fx:id="ViewIncompleted" mnemonicParsing="false" text="Incomplete Items" />
+                  <MenuItem fx:id="menuComplete" mnemonicParsing="false" onAction="#displayCompletedItems" text="Complete Items" />
+                  <MenuItem fx:id="menuIncomplete" mnemonicParsing="false" onAction="#displayIncompletedItems" text="Incomplete Items" />
+                  <MenuItem fx:id="ViewAll" mnemonicParsing="false" onAction="#displayAllItems" text="All Items" />
                </items>
             </Menu>
          </menus>
@@ -43,10 +44,35 @@
          <children>
             <TextField fx:id="currentDescription" alignment="CENTER" prefHeight="25.0" prefWidth="191.0" promptText="Description" />
             <DatePicker fx:id="dueDate" onAction="#getDate" prefHeight="25.0" prefWidth="119.0" promptText="Select Due Date" />
-            <Button fx:id="AddItem" mnemonicParsing="false" onAction="#addItem" text="Add Item" />
-            <Button fx:id="EditItem" mnemonicParsing="false" onAction="#editItem" text="Edit Item" />
-            <Button fx:id="DeleteItem" layoutX="529.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete Item" />
+            <CheckBox fx:id="completionCheckBox" mnemonicParsing="false" text="Task Complete">
+               <padding>
+                  <Insets left="10.0" top="3.0" />
+               </padding>
+            </CheckBox>
          </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="32.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="AddItem" mnemonicParsing="false" onAction="#addItem" text="Add Item">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Button>
+            <Button fx:id="EditItem" mnemonicParsing="false" onAction="#editItem" text="Edit Item">
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" />
+               </HBox.margin></Button>
+            <Button fx:id="DeleteItem" mnemonicParsing="false" onAction="#deleteItem" text="Delete Item">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin></Button>
+            <Button fx:id="DeleteAll" mnemonicParsing="false" onAction="#deleteAll" text="Delete All" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
       </HBox>
       <Separator opacity="0.0" prefHeight="21.0" prefWidth="600.0" />
       <SplitPane orientation="VERTICAL" prefHeight="306.0" prefWidth="600.0">
