@@ -5,7 +5,6 @@
 
 //THINGS TO DO:
     //Lots of warnings
-    //Guide
     //plantuml diagram
     //tests
     //video
@@ -13,7 +12,6 @@
 
 
 package baseline;
-import com.google.gson.JsonParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,12 +25,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.util.converter.BooleanStringConverter;
 import javafx.scene.control.MenuItem;
 
 public class FXMLController {
@@ -43,72 +37,62 @@ public class FXMLController {
     @FXML
     private URL location;
     @FXML
-    private Button AddItem;
+    private Button addItem;
     @FXML
-    private MenuItem CloseList;
+    private TableColumn<Item, String> description;
     @FXML
-    private TableColumn<Item, String> Description;
+    private TableColumn<Item, String> dueDate;
     @FXML
-    private TableColumn<Item, String> DueDate;
+    private TableColumn<Item, Boolean> completion;
     @FXML
-    private TableColumn<Item, Boolean> Completion;
+    private Button editItem;
     @FXML
-    private Button EditItem;
+    private Button deleteItem;
     @FXML
-    private Button DeleteItem;
-    @FXML
-    private Button DeleteAll;
+    private Button deleteAll;
     @FXML
     private TextField currentDescription;
     @FXML
-    private TableView<Item> ListOfItemsTable;
+    private TableView<Item> tableOfItems;
     @FXML
-    private Menu Menu;
+    private Menu menu;
     @FXML
-    private MenuBar MenuBar;
+    private MenuBar menuBar;
     @FXML
-    private MenuItem menuComplete;
+    private MenuItem menuCompleteButton;
     @FXML
-    private MenuItem menuIncomplete;
+    private MenuItem menuIncompleteButton;
     @FXML
-    private MenuItem ViewAll;
+    private MenuItem viewAllButton;
     @FXML
-    private MenuItem OpenList;
+    private MenuItem openButton;
     @FXML
-    private MenuItem SaveList;
+    private MenuItem saveButton;
     @FXML
-    private DatePicker dueDate;
+    private DatePicker datePicker;
     @FXML
-    private CheckMenuItem ViewCompleted;
-    @FXML
-    private CheckMenuItem ViewIncompleted;
-    @FXML
-    private Menu ViewList;
+    private Menu viewListButton;
     @FXML
     private CheckBox completionCheckBox;
 
-    private Item currentList = new Item();
     private int index = 0;
-    Item currentItem;
 
 
     @FXML
     void initialize() {
         //set table cell for description
-        Description.setCellValueFactory(new PropertyValueFactory("Description"));
+        description.setCellValueFactory(new PropertyValueFactory<>("Description"));
 
         //set table cell for  due dates
-        DueDate.setCellValueFactory(new PropertyValueFactory("dueDate"));
+        dueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
 
         //set table cell for complete/incompletes
-        //Completion.setCellFactory(TextFieldTableCell.forTableColumn(new BooleanStringConverter()));
-        Completion.setCellValueFactory(new PropertyValueFactory<Item, Boolean>("completionStatus"));
-        Completion.setOnEditCommit(event -> {
+        completion.setCellValueFactory(new PropertyValueFactory<>("completionStatus"));
+        completion.setOnEditCommit(event -> {
             Item item = event.getRowValue();
             item.setCompletionStatus(event.getNewValue());
-            ListOfItemsTable.refresh();
+            tableOfItems.refresh();
         });
-        //ListOfItemsTable.setEditable(true);
 
     }
 
@@ -116,7 +100,8 @@ public class FXMLController {
 
 
     //add button clicked, add info
-    public void addItem(ActionEvent e)
+    @FXML
+    void addItem(ActionEvent e)
     {
         //when add item is clicked, create a new item
         Item item = new Item();
@@ -129,15 +114,15 @@ public class FXMLController {
             //set description by getting it
             item.setDescription(currentDescription.getText());
             // get/set local date to N/A if null, else set the date correctly
-            if(dueDate.getValue() == null)
+            if(datePicker.getValue() == null)
             {
                 item.setDueDate("N/A");
             }
             else
             {
-                LocalDate myDate = dueDate.getValue();
+                LocalDate myDate = datePicker.getValue();
                 String currentDate = myDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                item.setDueDate(currentDate.toString());
+                item.setDueDate(currentDate);
             }
 
             //set completion status based on if selected or not
@@ -146,53 +131,48 @@ public class FXMLController {
 
 
             //insert items into table and to do list
-            ListOfItemsTable.getItems().add(item);
-            currentList.toDoList.add(item);
+            tableOfItems.getItems().add(item);
+            Item.toDoList.add(item);
 
 
             //clear description box and set dueDate box back to null
             currentDescription.clear();
-            dueDate.setValue(null);
+            datePicker.setValue(null);
         }
 
         //create item boxes in table
 
     }
 
-    public void getDate(ActionEvent e)
-    {
-        LocalDate myDate = dueDate.getValue();
-        String currentDate = dueDate.toString();
-        System.out.println(currentDate);
-    }
-
-
-
-    public void deleteItem(ActionEvent e)
+    @FXML
+    void deleteItem(ActionEvent e)
     {
         //get selected row and get all the items within the list
-        Item selectedItem = ListOfItemsTable.getSelectionModel().getSelectedItem();
-        ObservableList<Item> itemSelected, allItems;
-        allItems = ListOfItemsTable.getItems();
-        itemSelected = ListOfItemsTable.getSelectionModel().getSelectedItems();
+        Item selectedItem = tableOfItems.getSelectionModel().getSelectedItem();
+        ObservableList<Item> itemSelected;
+        ObservableList<Item> allItems;
+        allItems = tableOfItems.getItems();
+        itemSelected = tableOfItems.getSelectionModel().getSelectedItems();
 
         //remove the item from the display and todolist
-        currentList.toDoList.remove(selectedItem);
+        Item.toDoList.remove(selectedItem);
         itemSelected.forEach(allItems::remove);
     }
 
-    public void deleteAll (ActionEvent event){
+    @FXML
+    void deleteAll (ActionEvent event){
         //clears the entire table and list
         Item.getToDoList().clear();
-        ListOfItemsTable.getItems().clear();
+        tableOfItems.getItems().clear();
     }
 
 
     //functions very similarly to addItem with the addition of changing the specific index
-    public void editItem(ActionEvent e)
+    @FXML
+    void editItem(ActionEvent e)
     {
         //get index of selected row
-        int index = ListOfItemsTable.getSelectionModel().getSelectedIndex();
+        int idx = tableOfItems.getSelectionModel().getSelectedIndex();
         //get current description from user text box entry
         String newDescription = currentDescription.getText();
 
@@ -202,30 +182,31 @@ public class FXMLController {
             Item item = new Item();
             item.setDescription(currentDescription.getText());
             // get/set local date. If null, set to N/A. else adds the date from datePicker.
-            if(dueDate.getValue() == null)
+            if(datePicker.getValue() == null)
             {
                 item.setDueDate("N/A");
             }
             else
             {
-                LocalDate myDate = dueDate.getValue();
-                String currentDate = myDate.format(DateTimeFormatter.ofPattern("YYYY-MM-dd"));
-                item.setDueDate(currentDate.toString());
+                LocalDate myDate = datePicker.getValue();
+                String currentDate = myDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                item.setDueDate(currentDate);
             }
             //sets completion status
             item.setCompletionStatus(completionCheckBox.isSelected());
 
             //replaces the selected index with the new item in the table and list
-            ListOfItemsTable.getItems().set(index, item);
-            currentList.toDoList.set(index, item);
+            tableOfItems.getItems().set(idx, item);
+            Item.toDoList.set(idx, item);
 
             //resets current description and due date
-            dueDate.setValue(null);
+            datePicker.setValue(null);
             currentDescription.clear();
         }
     }
 
-    public void loadFile(ActionEvent e) throws FileNotFoundException
+    @FXML
+    void loadFile(ActionEvent e) throws FileNotFoundException
     {
         //create file chooser and set the title/filters
         FileChooser fileChooser = new FileChooser();
@@ -233,7 +214,7 @@ public class FXMLController {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"));
         //set a file to the selected file on the screen (basically like any typical file load in an app.)
-        File file = fileChooser.showOpenDialog(ListOfItemsTable.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(tableOfItems.getScene().getWindow());
 
         //import the list so we can divide the item information into the correct columns
         importList(file);
@@ -246,14 +227,15 @@ public class FXMLController {
 
     }
 
-    public void importList(File selectedFile) throws FileNotFoundException
+    @FXML
+    void importList(File selectedFile) throws FileNotFoundException
     {
         //creates filereader to read the passed in file
         FileReader reader = new FileReader(selectedFile);
         //clear old to do list
         Item.getToDoList().clear();
-        if(this.ListOfItemsTable!= null){
-            ListOfItemsTable.getItems().clear();
+        if(this.tableOfItems!= null){
+            tableOfItems.getItems().clear();
         }
         //set the index back to 0 for when we add
         index = 0;
@@ -286,14 +268,15 @@ public class FXMLController {
     private void displayList()
     {
         //displays all the information in the list on the table and increases the index by 1 for adding.
-        Description.setCellValueFactory(new PropertyValueFactory<>("description"));
-        DueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
-        Completion.setCellValueFactory(new PropertyValueFactory<>("completionStatus"));
-        ListOfItemsTable.getItems().add(Item.getToDoList().get(index));
+        description.setCellValueFactory(new PropertyValueFactory<>("description"));
+        dueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        completion.setCellValueFactory(new PropertyValueFactory<>("completionStatus"));
+        tableOfItems.getItems().add(Item.getToDoList().get(index));
         index++;
     }
 
-    public void saveList(ActionEvent e)
+    @FXML
+    void saveList(ActionEvent e)
     {
         //creates filechooser and asks for file
         FileChooser fileChooser = new FileChooser();
@@ -303,13 +286,13 @@ public class FXMLController {
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
         //creates a file based on the title set/file chosen
-        File file = fileChooser.showSaveDialog(ListOfItemsTable.getScene().getWindow());
+        File file = fileChooser.showSaveDialog(tableOfItems.getScene().getWindow());
 
         //gets the selected file
         getToDoList(file);
     }
 
-    void getToDoList(File selectedFile) {
+    public void getToDoList(File selectedFile) {
         //if the file can be saved in a valid way, it will be added/saved.
         try (PrintWriter writer = new PrintWriter(selectedFile)) {
             for (Item i : Item.getToDoList()) {
@@ -331,17 +314,17 @@ public class FXMLController {
         ObservableList<Item> completedItems = FXCollections.observableArrayList();
 
         //clear the table
-        ListOfItemsTable.getItems().clear();
+        tableOfItems.getItems().clear();
 
         //call a method to create a list of items with the "true" value
-        createCompletedList(true, completedItems);
+        createCompletedList(completedItems);
 
         //refresh the list
-        ListOfItemsTable.refresh();
-        ListOfItemsTable.setItems(completedItems);
+        tableOfItems.refresh();
+        tableOfItems.setItems(completedItems);
     }
 
-    public ObservableList<Item> createCompletedList(boolean completed, ObservableList<Item> items)
+    private ObservableList<Item> createCompletedList(ObservableList<Item> items)
     {
         //clear any items in the list
         items.clear();
@@ -349,7 +332,7 @@ public class FXMLController {
         //for each item, check if the completion status is complete. If not, change it.
         for(Item i : Item.getToDoList())
         {
-            if(completed == i.getCompletionStatus())
+            if(i.getCompletionStatus())
             {
                 items.add(i);
             }
@@ -358,23 +341,24 @@ public class FXMLController {
     }
 
     //essentially the same exact thing as completed
-    public void displayIncompletedItems(ActionEvent e)
+    @FXML
+    void displayIncompletedItems(ActionEvent e)
     {
         //make an observable list for completed items to display
         ObservableList<Item> completedItems = FXCollections.observableArrayList();
 
         //clear the table
-        ListOfItemsTable.getItems().clear();
+        tableOfItems.getItems().clear();
 
         //call a method to create a list of items with the "true" value
-        createIncompletedList(false, completedItems);
+        createIncompletedList(completedItems);
 
         //refresh the list
-        ListOfItemsTable.refresh();
-        ListOfItemsTable.setItems(completedItems);
+        tableOfItems.refresh();
+        tableOfItems.setItems(completedItems);
     }
 
-    public ObservableList<Item> createIncompletedList(boolean completed, ObservableList<Item> items)
+    private void createIncompletedList(ObservableList<Item> items)
     {
         //clear any items in the list
         items.clear();
@@ -382,30 +366,27 @@ public class FXMLController {
         //for each item, check if the completion status is complete. If not, change it.
         for(Item i : Item.getToDoList())
         {
-            if(completed == i.getCompletionStatus())
+            if(!i.getCompletionStatus())
             {
                 items.add(i);
             }
         }
-        return items;
     }
 
     //almost the same as the above, but simpler
-    public void displayAllItems(ActionEvent e)
+    @FXML
+    void displayAllItems(ActionEvent e)
     {
         ObservableList<Item> allItems = FXCollections.observableArrayList();
 
-        ListOfItemsTable.getItems().clear();
+        tableOfItems.getItems().clear();
 
         //just display all the items in the list
-        for(Item i : Item.getToDoList())
-        {
-            allItems.add(i);
-        }
+        allItems.addAll(Item.getToDoList());
 
         //refresh list
-        ListOfItemsTable.refresh();
-        ListOfItemsTable.setItems(allItems);
+        tableOfItems.refresh();
+        tableOfItems.setItems(allItems);
     }
 
 

@@ -1,56 +1,77 @@
 @startuml
 'https://plantuml.com/sequence-diagram
 
-class Application
+class ToDoListApplication
 {
     +main(String[])
     +start(Stage stage)
-    -String getListTitleInput()
-    +ToDoList createList(String title)
-    +File saveList(ToDoList list)
-    +ToDoList loadList(String name)
 }
 
-
-class ToDoList
-{
-    String: title;
-    -int capacity
-    List<Item>: items
-    +int getCapacity()
-    +String getTitle()
-    +ToDoList()
-    +ToDoList addItemToList(ToDoList listOne, Item item)
-    +Item searchForItem(ToDoList list, String name)
-    +ToDoList removeItemFromList(ToDoList list, Item item)
-}
 
 class Item
 {
     String: description
     String: dueDate
     boolean: completion
-    +Item(String description, String dueDate)
+    +List<Item> toDoList
+    +Item()
+    +Item(String description, String dueDate, boolean completion)
     +String getDescription()
+    +void setDescription()
     +String getDueDate()
-    +Item editItemDescription(Item item)
-    +Item editDueDate(Item item)
-    -Item markItemComplete(Item item)
+    +void setDueDate()
+    +void getCompletionStatus()
+    +void setCompletionStatus()
+    +List<Item> getToDoList
 }
 
 
-class Display
+class FXMLController
 {
-    -displayList(ToDoList list)
-    -displayIncompleteItems(ToDoList list)
-    -displayCompleteItems(ToDoList list)
+        -ResourceBundle resources;
+        -URL location;
+        -Button addItem;
+        -TableColumn<Item, String> description;
+        -TableColumn<Item, String> dueDate;
+        -TableColumn<Item, Boolean> completion;
+        -Button editItem;
+        -Button deleteItem;
+        -Button deleteAll;
+        -TextField currentDescription;
+        -TableView<Item> tableOfItems;
+        -Menu menu;
+        -MenuBar menuBar;
+        -MenuItem menuCompleteButton;
+        -MenuItem menuIncompleteButton;
+        -MenuItem viewAllButton;
+        -MenuItem openButton;
+        -MenuItem saveButton;
+        -DatePicker datePicker;
+        -Menu viewListButton;
+        -CheckBox completionCheckBox;
+
+        +void initialize()
+        +void addItem(ActionEvent e)
+        +void deleteItem(ActionEvent e)
+        +void deleteAll (ActionEvent event)
+        +void editItem(ActionEvent e)
+        +void loadFile(ActionEvent e) throws FileNotFoundException
+        +void importList(File selectedFile) throws FileNotFoundException
+        -void displayList()
+        +void saveList(ActionEvent e)
+        +void getToDoList(File selectedFile)
+        +void displayCompletedItems(ActionEvent e)
+        -ObservableList<Item> createCompletedList(ObservableList<Item> items)
+        +displayIncompletedItems(ActionEvent e)
+        -void createIncompletedList(ObservableList<Item> items)
+        +void displayAllItems(ActionEvent e)
+
 }
 
 
-
-Application --o ToDoList
-Application --o Item
-Application --o Display
+ToDoListApplication <|-- javafx.application.Application
+ToDoListApplication --o Item
+ToDoListApplication --o FXMLController
 
 
 @enduml

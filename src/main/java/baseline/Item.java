@@ -55,9 +55,9 @@ public class Item {
         return dueDate;
     }
 
-    public void setDueDate(String DueDate)
+    public void setDueDate(String dueDate)
     {
-        this.dueDate = DueDate;
+        this.dueDate = dueDate;
     }
 
     public boolean getCompletionStatus() {
@@ -71,11 +71,6 @@ public class Item {
     public static List<Item> getToDoList()
     {
         return toDoList;
-    }
-
-    public static void removeItem(Item item){
-        //remove the passed item from the toDoList
-        toDoList.remove(item);
     }
 
 
