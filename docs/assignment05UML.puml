@@ -68,7 +68,13 @@ class FXMLController
 
 }
 
+class RequirementChecker
+{
+    + boolean checkDescription(String newDescription)
+    +String checkDueDate(LocalDate date)
+}
 
+FXMLController --o RequirementChecker
 ToDoListApplication <|-- javafx.application.Application
 ToDoListApplication --o Item
 ToDoListApplication --o FXMLController

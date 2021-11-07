@@ -3,13 +3,6 @@
  *  Copyright 2021 John Ashley
  */
 
-//THINGS TO DO:
-    //Lots of warnings
-    //plantuml diagram
-    //tests
-    //video
-
-
 
 package baseline;
 import javafx.collections.FXCollections;
@@ -76,6 +69,7 @@ public class FXMLController {
     private CheckBox completionCheckBox;
 
     private int index = 0;
+    private final RequirementChecker checker = new RequirementChecker();
 
 
     @FXML
@@ -109,21 +103,14 @@ public class FXMLController {
         String newDescription = currentDescription.getText();
 
         //check for its length
-        if(newDescription.length() > 1 && newDescription.length() < 256)
+        if(checker.checkDescription(newDescription))
         {
             //set description by getting it
             item.setDescription(currentDescription.getText());
-            // get/set local date to N/A if null, else set the date correctly
-            if(datePicker.getValue() == null)
-            {
-                item.setDueDate("N/A");
-            }
-            else
-            {
-                LocalDate myDate = datePicker.getValue();
-                String currentDate = myDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                item.setDueDate(currentDate);
-            }
+            // get/set local date to N/A if null, else set the date to what the datePicker has
+            String currentDate = checker.checkDueDate(datePicker.getValue());
+            item.setDueDate(currentDate);
+
 
             //set completion status based on if selected or not
             item.setCompletionStatus(completionCheckBox.isSelected());
@@ -177,21 +164,15 @@ public class FXMLController {
         String newDescription = currentDescription.getText();
 
         //check for length
-        if(newDescription.length() > 1 && newDescription.length() < 256) {
+        if(checker.checkDescription(newDescription)) {
             //create a new item and set the description
             Item item = new Item();
             item.setDescription(currentDescription.getText());
+
             // get/set local date. If null, set to N/A. else adds the date from datePicker.
-            if(datePicker.getValue() == null)
-            {
-                item.setDueDate("N/A");
-            }
-            else
-            {
-                LocalDate myDate = datePicker.getValue();
-                String currentDate = myDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                item.setDueDate(currentDate);
-            }
+            String currentDate = checker.checkDueDate(datePicker.getValue());
+            item.setDueDate(currentDate);
+
             //sets completion status
             item.setCompletionStatus(completionCheckBox.isSelected());
 
@@ -307,7 +288,7 @@ public class FXMLController {
 
 
 
-
+    @FXML
     public void displayCompletedItems(ActionEvent e)
     {
         //make and observable list for completed items to display

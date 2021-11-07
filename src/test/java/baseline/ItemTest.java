@@ -73,6 +73,7 @@ class ItemTest {
     @Test
     void getToDoList()
     {
+        Item.getToDoList().clear();
         Item item = new Item("Test", "2021-11-02",  true);
         item.toDoList.add(item);
         item = new Item("Test2", "2021-11-03",  false);
